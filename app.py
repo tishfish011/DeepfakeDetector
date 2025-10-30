@@ -135,14 +135,14 @@ def main():
     detector = load_model(selected_model)
     
     # Display model info in sidebar
-    st.sidebar.subheader("Model Information")
-    model_info = detector.get_model_info()
-    st.sidebar.write(f"**Architecture**: {model_info.get('architecture', 'unknown')}")
-    st.sidebar.write(f"**Parameters**: {model_info.get('parameters', 0):,}")
-    st.sidebar.write(f"**Device**: {model_info.get('device', 'unknown')}")
-    if 'checkpoint_val_acc' in model_info and model_info['checkpoint_val_acc'] != 'unknown':
-        st.sidebar.write(f"**Validation Accuracy**: {model_info['checkpoint_val_acc']:.2f}%")
-    st.sidebar.write(f"**Status**: {'Trained' if model_info.get('trained', False) else 'Untrained'}")
+    # st.sidebar.subheader("Model Information")
+    # model_info = detector.get_model_info()
+    # st.sidebar.write(f"**Architecture**: {model_info.get('architecture', 'unknown')}")
+    # st.sidebar.write(f"**Parameters**: {model_info.get('parameters', 0):,}")
+    # st.sidebar.write(f"**Device**: {model_info.get('device', 'unknown')}")
+    # if 'checkpoint_val_acc' in model_info and model_info['checkpoint_val_acc'] != 'unknown':
+    #     st.sidebar.write(f"**Validation Accuracy**: {model_info['checkpoint_val_acc']:.2f}%")
+    # st.sidebar.write(f"**Status**: {'Trained' if model_info.get('trained', False) else 'Untrained'}")
     
     if not st.session_state.model_loaded:
         st.error("Failed to load the detection model. Please refresh the page.")

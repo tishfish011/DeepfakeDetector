@@ -3,6 +3,7 @@ import torch.nn as nn
 import numpy as np
 import models
 import torchvision.models as models
+from torchvision import transforms
 from PIL import Image
 import os
 
@@ -86,21 +87,29 @@ class DeepfakeDetector:
     #     self._load_model()
     #     self._setup_transforms()
 
+
     def __init__(self, model_name='resnet18', checkpoint_path="./deepfake_model.pth"):
         super().__init__()
-        # Load a ResNet backbone
         self.model_name = model_name
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+        # --- Load model ---
         self.model = models.resnet18(pretrained=False)
         num_features = self.model.fc.in_features
-        # self.model.fc = nn.Linear(num_features, 1)  # adjust for your task
-        self.model.fc = nn.Linear(num_features, 2)
+        self.model.fc = nn.Linear(num_features, 2)  # for binary classification
 
-        # Load your checkpoint safely
+        # --- Load checkpoint ---
         state_dict = torch.load(checkpoint_path, map_location="cpu")
         self.model.load_state_dict(state_dict, strict=False)
+        self.model = self.model.to(self.device)
+        self.model.eval()
         print("✅ Loaded ResNet checkpoint")
+
         self.model_info = {}
+        # self._load_model()
+
+        # --- Add preprocessing transform ---
+        self._setup_transforms()
 
     def forward(self, x):
         return self.model(x)
