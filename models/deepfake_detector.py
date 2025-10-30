@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import numpy as np
+import models
+import torchvision.models as models
 from PIL import Image
 import os
 
@@ -64,25 +66,45 @@ class SimpleCNN(nn.Module):
         return x
 
 class DeepfakeDetector:
-    def __init__(self, model_name='simple_cnn', checkpoint_path=None):
-        """
-        Initialize the deepfake detector with a model
+    # def __init__(self, model_name='simple_cnn', checkpoint_path=None):
+    #     """
+    #     Initialize the deepfake detector with a model
         
-        Args:
-            model_name: Name of the model architecture
-                Options: 'simple_cnn', 'advanced_cnn', 'vision_transformer', 
-                         'cnn_transformer', 'cnn_transformer_cls'
-            checkpoint_path: Path to trained model checkpoint (optional)
-        """
+    #     Args:
+    #         model_name: Name of the model architecture
+    #             Options: 'simple_cnn', 'advanced_cnn', 'vision_transformer', 
+    #                      'cnn_transformer', 'cnn_transformer_cls'
+    #         checkpoint_path: Path to trained model checkpoint (optional)
+    #     """
+    #     self.model_name = model_name
+    #     self.checkpoint_path = checkpoint_path
+    #     self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    #     self.model = None
+    #     self.transform = None
+    #     self.model_info = {}
+        
+    #     self._load_model()
+    #     self._setup_transforms()
+
+    def __init__(self, model_name='resnet18', checkpoint_path="./deepfake_model.pth"):
+        super().__init__()
+        # Load a ResNet backbone
         self.model_name = model_name
-        self.checkpoint_path = checkpoint_path
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.model = None
-        self.transform = None
+        self.model = models.resnet18(pretrained=False)
+        num_features = self.model.fc.in_features
+        # self.model.fc = nn.Linear(num_features, 1)  # adjust for your task
+        self.model.fc = nn.Linear(num_features, 2)
+
+        # Load your checkpoint safely
+        state_dict = torch.load(checkpoint_path, map_location="cpu")
+        self.model.load_state_dict(state_dict, strict=False)
+        print("✅ Loaded ResNet checkpoint")
         self.model_info = {}
-        
-        self._load_model()
-        self._setup_transforms()
+
+    def forward(self, x):
+        return self.model(x)
+    
     
     def _load_model(self):
         """Load the model architecture and optionally load checkpoint"""
