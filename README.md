@@ -88,8 +88,6 @@ python train.py --model advanced_cnn --epochs 5 --train-max-samples 10000 --test
 - `--train-max-samples`: Limit training samples for testing (default: None = full dataset)
 - `--test-max-samples`: Limit test samples for testing (default: None = full dataset)
 
-**Note**: Training on the full OpenFake dataset requires significant resources (GPU recommended). Use `--train-max-samples` and `--test-max-samples` for quick testing.
-
 ### Evaluating Models
 
 To evaluate a trained model:
@@ -199,8 +197,6 @@ With proper training on the full OpenFake dataset:
 - **Vision Transformer**: 87-94% accuracy
 - **CNN-Transformer Hybrid**: 86-93% accuracy
 
-*Note: Actual performance depends on training duration, hyperparameters, and computational resources.*
-
 ## Dataset Details
 
 The OpenFake dataset (`ComplexDataLab/OpenFake`) provides:
@@ -255,7 +251,7 @@ arXiv:2509.09495, September 2025
 
 ## License
 
-This project is for educational and research purposes. The OpenFake dataset has CC-BY-SA-4.0 license with non-commercial restrictions for some subsets.
+This project is for educational and research purposes. The OpenFake dataset has CC-BY-SA-4.0 license.
 
 ## Acknowledgments
 
